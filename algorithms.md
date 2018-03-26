@@ -1,6 +1,6 @@
 ## Algorithms
 
-- notes from the book "Grokking Algorithms"
+  - notes from the book "Grokking Algorithms"
 
 ### Chapter 1
 
