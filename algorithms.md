@@ -36,12 +36,12 @@ Arrays are great to read random elements
 Run time for common operations
 
 ```
-_______ |Arrays | Lists
+_________ |Arrays | Lists
 reading   | O(1)   | O(n)
--------------------------------
+-----------------------------
 insertion | O(n)   | O(1)
-------------|----------|---------
-deletion  | O(n)    | O(1)
+----------|--------|---------
+deletion  | O(n)   | O(1)
 ```
 
 Selection Sort
