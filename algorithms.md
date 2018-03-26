@@ -29,8 +29,8 @@ Some common Big O runtimes:
 
 ### Chapter 2
 
-Linked list vs Arrays (vectors)
-Linked lists are great if we are going to read all items and inserts and deletes
+Linked list vs Arrays (vectors)<br>
+Linked lists are great if we are going to read all items and inserts and deletes<br>
 Arrays are great to read random elements
 
 Run time for common operations
