@@ -48,4 +48,71 @@ Selection Sort
 
 Takes O(n*n) time
 
+### Chapter 4 - Quick Sort
+
+A D&C (Divide and Conquer algorithm)
+
+Steps:
+1. Figure out the base case - this should be the simplest possible case
+2. Divide or decrease the problem until it becomes the base case
+
+Partitioning:
+* Pick an element in the array, that's the pivot.
+* Find elements larger than the pivot
+* Find elements smaller than the pivot
+
+Now you have:
+* sub-array that's less thant the pivot
+* the pivot
+* sub-array of all the numbers greater than the pivot
+
+The two sub arrays are not sorted, they're just partitioned.
+
+```python
+quicksort(lowerValues) + pivot + quicksort(higherValues)
+```
+
+Quicksort in Haskell
+```haskell
+quicksort :: (Ord a) => [a] -> [a]
+quicksort [] = []
+quicksort (x:xs) =
+    let lowersorted = quicksort [l | l <- xs, l <= x]
+        highersorted = quicksort [m | m <- xs, m > x ]
+    in lowersorted ++ [x] ++ highersorted
+```
+
+Quicksort in Python
+```python
+def quicksort(array):
+  if len(array) < 2:
+    return array
+  else:
+    pivot = array[0]
+    less = [i for i in array[1:] if i <= pivot]
+    greater = [i for i in array[1:] if i > pivot]
+
+    return quicksort(less) + [pivot] + quicksort(greater)
+```
+
+Inductive proof:
+* One way to prove that an algorithm works.
+* Each inductive proof has 2 steps: 1. base case and 2. inductive case
+
+Big O notation revisited
+
+```
+______________ | Big O      |
+binary search  | O(log n)   |
+---------------|--------- --|--
+simple search  | O(n)       |
+---------------|------------|--
+quick sort     | O(n log n) |
+---------------|------------|--
+selection sort | O(n^2)     |
+---------------|------------|--
+travelling     | O(n!)      |
+  salesman     |            |
+```
+
 
