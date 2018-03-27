@@ -115,4 +115,6 @@ travelling     | O(n!)      |
   salesman     |            |
 ```
 
+### Chapter 5 - Hash Tables
+
 
