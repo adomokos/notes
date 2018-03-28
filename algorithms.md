@@ -179,3 +179,21 @@ def search(name):
 Running time is at least O(number of edges)
 Adding a person takes constant time O(1).
 It takes O(number of vertices + number of edges).
+
+### Dijkstra's Algorithm
+
+Finds not the shortest, but the "fastest" path between 2 points.
+
+It has four steps:
+1. Find the cheapest node, this is the node you can get to in the least amount of time.
+2. Check whether there's a cheaper path to the neighbors of this node. If so, update their costs.
+3. Repeat until you've done this for every node in the graph.
+4. Calculate the final path.
+
+Terminology:
+Each edge in the graph has a number associated to it, these are called weights.
+It uses weighted graph.
+To calculate shortest path in unweighted graph, use breadth-first search, in a weighted graph, use Dijkstra's algorithm.
+Graphs can also have cycles.
+Only works with directed acyclic graphs.
+
