@@ -102,7 +102,81 @@ Redshift stores its data in 1MB chunks.
 * Reduces overhead of redistribution
 * Customizable compression
 
+### Getting Data in Redshift
 
+* COPY is the most powerful
+* Integrating Redshift into Your ETL
+   - Leveraging Copy
+   - Staging Tables
+   - Transformations
+   - Automated Loads
 
+Loading into Nodes and Node Clices
 
+### COPY Command
 
+#### CSV file
+
+* Don't be tempted with INSERT
+
+```sql
+  copy dimproduct
+  -- options column list, ordinal by default
+  from '' -- specify the source
+  iam_role '' -- several other ways to specify authorization
+  -- format, additional options
+```
+
+Loading the CSV file took 55 seconds. SUPER SLOW!!!
+
+#### Load with manifest
+
+* Try pipe-delimited
+* leverage parallel load processing (multiples of compute clusters)
+* You can leverage gzip as well
+* You can set up a manifest file, all parallel load will leverage that
+
+```sql
+  copy factsales
+  from 's3://address'
+  region 'us-west-2'
+  iam_role 'arn:aws....'
+  GZIP
+  delimiter '|'
+  manifest
+```
+
+240,388 records were loaded this way in 1m 3s in the demo.
+Across - US East -> US West
+
+#### Load dimdate
+Data is in JSON format
+
+```sql
+  copy dimdate
+  from 's3://address'
+  region 'us-west-2'
+  iam_role 'arn:aws....'
+  json as 'auto'
+```
+Error received:
+```
+[Amazon](500310) Invalid operation: Load into table 'dimdate' failed. Check 'stl_load_errors' system table for details.;
+```
+
+This table is where all the logs are.
+
+```sql
+select * from stl_load_errors
+```
+
+JSON should not be in an array, no comma between documents.
+2,100 records loaded in 18 seconds.
+
+We could load data directly from DynamoDB.
+Other zip files.
+We could load data from an SSH sesssion.
+
+### Loading with ETLs
+
+Redshift is a different platform, SISS, or other conventional tools might not apply.
