@@ -180,3 +180,114 @@ We could load data from an SSH sesssion.
 ### Loading with ETLs
 
 Redshift is a different platform, SISS, or other conventional tools might not apply.
+
+### Streaming Data into Redshift with Kinesis
+
+Delivery streaming
+
+PUT options:
+* Firehose PUT APIs
+* Amazon Kinesis Agent
+* AWS IoT
+* CloudWatch Logs or Events
+
+Demo used direct put.
+We could create transformations with AWS Lamdba.
+Destination -> AWS S3 or Redshift Cluster.
+
+We can create test streams to make sure it's set up properly.
+
+Lambda can be injected, it can process data real time, good alternative to stream data into the DW continuously.
+
+## Connectoring, Querying, and Consuming Data
+
+AMZN Redshift SQL Syntax
+
+* ANSI SQL Standards
+* Redshift quirks
+* Diff between Redshift and Postgres
+    - DDL diffs
+    - DML diffs
+
+### Redshift SQL Engine
+
+* Differences between Redshift and other SQL engines
+* Supported constraints are for query optimization, not data quality
+* Some constraints not supported - default, check, exclusions
+* "Create Index" does not exist - as Redshift is column oriented DB
+* "Alter Column" does not exist
+* "Alter Table" does support adding and dropping columns
+
+Data Types:
+* Smallint (Int2)
+* Integer (Int, Int4)
+* Bigint (Int8)
+* Decimal (Numeric)
+* Real (Float4)
+* Double Precision (Float8, Float)
+* Boolean (Bool)
+* Char (Character, NChar, BPChar)
+* Varchar (Character Varying, NVarChar, Text)
+* Date
+* Timestamp (Timestamp without Time Zone)
+* Timestampz (Timestamp with Time Zone)
+
+String manipulation:
+* CONCAT()
+* SUBSTRING()
+* POSITION()
+* REGEX_*()
+    - search "Redshift String Manipulation"
+
+Date functions:
+* DATEADD()
+* DATEDIFF()
+* DATE_PART()
+* LAST_DAY()
+    - search "Redshift Date Manipulation" for more info
+
+Math functions:
+* SUM()
+* ABS()
+* COS()
+* FLOOR()
+* MOD()
+  - search "Redshift Math Functions"
+
+Data conversion functions:
+* CAST()
+* CONVERT()
+
+[Redshift developer guide](https://aws.amazon.com/documentation/redshift)
+
+### Txn, Isolation, Select
+
+SELECT is full featured
+CTEs are also supported
+
+### Ranking Window Functions
+
+* DENSE_RANK
+* NTILE
+* PERCENT_RANK
+* RANK
+* ROW_NUMBER
+
+### Advanced Queries
+
+We can create Python functions:
+
+```sql
+create or replace function month_name(n integer)
+return varchar(3)
+
+stable as $$
+
+if n==1:   return 'Jan'
+elif n==2: return 'Feb'
+...
+
+$$ language plpythonu;
+```
+
+Building views, that can be used by other BI tools.
