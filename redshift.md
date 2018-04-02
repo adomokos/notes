@@ -291,3 +291,173 @@ $$ language plpythonu;
 ```
 
 Building views, that can be used by other BI tools.
+
+## Redshift Security
+
+OSI - Open System Interconnection
+* Physical layer
+* Data layer
+* Network layer
+* Application layer
+
+### Shared Responsibility
+
+Amazon AWS Shared Responsibility
+
+Responsibility of AWS:
+* Secrurity of host OS and down
+* Physical security of data centers
+* Upkeep of infrastructure
+* Redundancies, SLAs, patching
+
+Responsibility of Client:
+* Security of guest operating system
+* Security of applications and platform
+* Security of VPC
+* Security of Data
+
+### Securing the VPC
+
+* Similar with physical network
+* Get training or hire a professional
+
+### Root-account Policy
+* Locked away physically and forgotten
+* Used once to establish security account delegated areas of control
+
+### Redshift Data Loading Lifecycle
+
+* Source files
+* S3 storage
+* Redshift cluster
+
+Server-side encryption:
+Data can be encrypted
+S3 encrypts the data it receives, then decrypts it to transform it and send it over to Redshift in an encrypted format.
+Request S3 to encrypt data by providing the encryption header in the REST call.
+We can request encryption in AWS management console
+
+Client side encryption:
+Encrypt data before sent to S3.
+
+```sql
+copy dimproduct from 's3://mybucket/...'
+iam_role 'arn:aws:iam::...'
+master_symmetric_key '<master_key>'
+encrypted
+delimiter '|';
+```
+SSL is always recommended!
+SSL is always enabled, but not required by default.
+Set `require_ssl` false to true.
+
+Redshift is using AWS Hardware Accelerated SSL
+We don't need to worry about protecting over the wire.
+
+### AMZN Redshift Security
+
+User security:
+* Similar to other RDBMS engines
+* Management of GRANT and REVOKE
+* USERS are grouped into GROUPS
+* Objects
+
+GRANT gives right to perform a function on an object to a user or to a group.
+
+* Users receive no rights by default
+* SUPERUSER has all rights
+* The number of SUPERUSER should be limited
+
+The Demo DW User Groups are the followings:
+
+* Finance
+* Sales
+* Data Warehouse Developers
+
+```sql
+-- list of finance users
+create user joesmith with password 'somePassword1';
+create user janesmith with password 'somePassword1';
+create user financeapp with password 'appPassword1';
+
+create group finance;
+
+alter group finance add user joesmith;
+alter group finance add user janesmith;
+
+grant select on table dimproduct to group finance;
+grant select on table factsales to group finance;
+
+grant update on table factsales to financeapp;
+```
+
+Schema's can be a group of tables, schemas can have special security:
+
+```sql
+create schema secure;
+
+create table secure.accountnum
+(accountkey int,
+ accountnum varchar(10),
+ accountloc varchar(23),
+ payoutcode varchar(15)
+ );
+
+ create table secure.accountholder
+ (accountkey int,
+  account_name varchar(50),
+  account_contact varchar(25));
+
+grant usage on schema "secure" to group finance;
+
+-- this would grant select to all existing tables, but not new ones
+grant select on all tables in schema "secure" to group finance;
+
+-- this would grant select on all future tables as well
+alter default privileges in schema "secure" grant select on tables to group finance;
+```
+
+Grant select columns to a group from a table, by using a view. Then that view can have select access to a group.
+
+## Maintenance
+
+### Backup
+
+Redshift maintains 3 copies of your cluster:
+* Original cluster
+* Cluster node replicas
+* Backup on S3 Storage
+
+AWS Provides an equal amount of storage for backup as your configured cluster
+
+(By default, a single day backup is automatically taken and stored to S3.)
+
+### Vacuum
+
+When Redshift deletes, it does not reclaim space. Over time these could add additional query time.
+
+You can run VACUUM on the cluster or on the tables.
+
+VACUUM complete cluster requires superuser
+
+```sql
+select * from svv_vacuum_progress`;
+```
+
+### System Views
+
+Provides a glimpse into the inner-workings of RedShift.
+`stl` - system table logs
+`stv` - system table snapshots
+`svv` - system view snapshot
+`svl` - system view log
+`pg` - catalog tables
+
+### A glance of system views
+
+https://github.com/awslabs/amazon-redshift-utils
+
+Good code snippets, tutorials.
+
+EXPLAIN command is very helpful to understand query plans.
+
