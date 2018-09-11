@@ -90,3 +90,51 @@ docker container pause nginx-test
 ```
 docker container prune
 ```
+
+#### To Run MS SQL Server in Docker
+
+```
+$: docker pull microsoft/mssql-server-linux:2017-latest
+
+$: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=<the-password>' \
+   -p 1433:1433 --name sql1 \
+   -d microsoft/mssql-server-linux:2017-latest
+```
+
+#### Docker Networking
+
+To pull an image:
+
+```
+docker image pull redis:alpine
+docker image pull russmckendrick/moby-counter
+```
+
+To create a network:
+```
+docker network create moby-counter
+```
+To launch the container in that network:
+```
+docker container run -d --name redis --network moby-counter redis:alpine
+docker container run -d --name moby-counter --network moby-counter -p 8080:80 russmckendrick/moby-counter
+```
+
+Ping the redis host from the moby-counter:
+```
+docker container exec moby-counter ping -c 3 redis
+```
+
+Let's see what the /etc/hosts file has to resolve `redis` to an IP address:
+```
+docker container exec moby-counter cat /etc/hosts
+```
+If no sign of `redis` there, check `/etc/resolv.conf`:
+```
+docker container exec  moby-counter cat /etc/resolv.conf
+```
+To see how the name server is handling this:
+```
+docker container exec moby-counter nslookup redis 127.0.0.11
+```
+
