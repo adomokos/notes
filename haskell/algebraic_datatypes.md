@@ -27,3 +27,21 @@ Bool :: *
 λ> :k []
 [] :: * -> *
 ```
+
+### Sum types
+
+```haskell
+data Bool = False | True
+```
+The "|" represents logical disjunction - that is, "or". This is the "sum" in algebraic data types.
+
+### Product types
+
+A product type's cardinality is the product of the cardinaltities of its inhabitants. Arithmetically, products are the result of __multiplication__. Where a sum type was expressing or, a product type expresses __and__.
+
+For those that have programmed in C-like languages before, a product is like a struct. For those that have not, a product is a way to carry multiple values around in a single data constructor.
+
+### newtype
+
+One key contrast between a __newtype__ and a type alias is taht you can define typeclass instances for newtypes that differ from the instances for their underlying type.
+

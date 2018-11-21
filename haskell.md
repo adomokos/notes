@@ -201,20 +201,3 @@ Once again! The difference between a concrete type and a type constructor functi
 
 you’ll get an error. You can however create a list of Maybe Int, or Maybe a. That’s because Maybe is a type constructor function, but a list needs to contain values of a concrete type. Maybe Int and Maybe a are concrete types (or if you want, calls to type constructor functions that return concrete types.)
 
-## Algebraic Data Types
-
-One key contrast between a __newtype__ and a type alias is taht you can define typeclass instances for newtypes that differ from the instances for their underlying type.
-
-### Sum types
-
-```haskell
-data Bool = False | True
-```
-The "|" represents logical disjunction - that is, "or". This is the "sum" in algebraic data types.
-
-### Product types
-
-A product type's cardinality is the product of the cardinaltities of its inhabitants. Arithmetically, products are the result of __multiplication__. Where a sum type was expressing or, a product type expresses __and__.
-
-For those that have programmed in C-like languages before, a product is like a struct. For those that have not, a product is a way to carry multiple values around in a single data constructor.
-
