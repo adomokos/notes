@@ -92,3 +92,55 @@ Probes can have the following results:
 * Success
 * Failure
 * Unknown
+
+### Deployment Core Concepts
+
+A ReplicaSet is as declarative way to manage Pods. A Deployment is a declarative way to manage Pods using a ReplicaSet.
+A ReplicaSet acts as a Pod controller:
+* Self-healing mechanism
+* Ensure the requested number of Pods are available
+* Provide fault-tolerance
+* Can be used to scale pods
+* Relies on a Pod template
+* No need to create Pods directly!
+* Used by deployments
+
+Deployments -> ReplicaSet -> Pod -> Container
+
+Deployments manages Pods:
+* Pods are managed using ReplicaSets
+* Scales ReplicaSets which scale Pods
+* Supports zero-downtime updates by creating and destroying RelicaSets
+* Provides rollback functionality
+* Creates a unique lable that is assigned to the ReplicaSet and generated Pods
+* YAML is very similar to a ReplicaSet
+
+### Creatign Deployments
+
+`kubectl scale deployment [deployment-name] --replicas=5` - Scale the deployment to 5 Pods
+`kubectl scale -f file.deployment.yml --replicas=5`
+You can specify this in the YAML as well.
+
+Demo:
+
+```yaml
+kubectl create -f nginx.deployment.yml --save-config
+kubectl describe [pod | deployment] [pod-name | deployment-name]
+kubectl apply -f nginx.pod.yml
+kubectl get deployments --show-labels
+kubectl get deployments -l app=my-nginx
+kubectl scale -f nginx.deployment.yml --replicas=4
+```
+
+### Deployment Options
+
+Zero downtime deployments allow software updates to be deployed to production without impacting end users.
+
+* One of the strength of Kubernetes is zero downtime deployments
+* Update an application's Pods without impacting end users
+* Several options are available:
+  - Rolling updates
+  - Blue-green deployments
+  - Canary deployments
+  - Rollbacks
+
