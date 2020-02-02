@@ -115,7 +115,7 @@ Deployments manages Pods:
 * Creates a unique lable that is assigned to the ReplicaSet and generated Pods
 * YAML is very similar to a ReplicaSet
 
-### Creatign Deployments
+## Creatign Deployments
 
 `kubectl scale deployment [deployment-name] --replicas=5` - Scale the deployment to 5 Pods
 `kubectl scale -f file.deployment.yml --replicas=5`
@@ -143,4 +143,28 @@ Zero downtime deployments allow software updates to be deployed to production wi
   - Blue-green deployments
   - Canary deployments
   - Rollbacks
+
+## Creating Services
+
+Pods are "mortal" and may only live a short time (ephemeral).
+You can't rely on a Pod IP address staying the same.
+Pods can be horizontally scaled so each Pod get its own IP address.
+A Pod gets an IP address after it has been scheduled (no way for clients to know IP ahead of time).
+
+### The role of Services
+
+* The goal of services is to abstract Pod IP addresses from consumers. Labels are important, as they are used to associate pods with a service.
+* Load balances between the Pods
+* Relies on labels to associate a Service with a Pod
+* Node's kube-proxy creates a virtual IP for Services
+* Layer 5 (TCP/UDP over IP)
+* Services are not ephemeral
+* Creates endpoints which sit between a Service and Pod
+
+### Service Types
+
+1. Default type - Cluster IP - expose the service on a cluster-internal IP
+2. NodePort - Expose the service on each Node's IP at a static port.
+3. LoadBalancer - Provision an external IP to act as a load balancer for the service
+4. External Name - Maps a service to a DNS name
 
