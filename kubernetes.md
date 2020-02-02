@@ -168,3 +168,49 @@ A Pod gets an IP address after it has been scheduled (no way for clients to know
 3. LoadBalancer - Provision an external IP to act as a load balancer for the service
 4. External Name - Maps a service to a DNS name
 
+## Storage Options
+
+A Volume can be used to hold data and state for Pods and containers.
+Pods live and die soe ther file system is short lived (ephemeral).
+Volumes can be used to store state/data and use it in a Pod.
+A Pod can have multiple Volumes attached to it.
+Containers rely on a mountPath to access a Volume.
+
+### Volumes
+A Volue references a storage location.
+Must have a unique name.
+Attached to a Pod and may or may not be tied to the Pod's lifetime (depending on the Volume type).
+A Volume Mount references a Volume by name and defined a mountPath.
+
+Volume Type Examples:
+* emptyDir - Empty directory for storing "transient" data (shares of Pod's lifetime), useful for sharing files between containers running in a Pod.
+* hostPath - Pod Mounts into the node's filesystem.
+* nfs - A Network File System share mounts into the Pod
+* configMap/secret - special types of volumes that provide a Pod with access to Kubernetes resources
+* persistenVolumeClaim - provides Pods with a more persistent storage option that is abstracted from the details
+* Cloud - Cluster-wide storage
+
+### Persistent Volumes and Persistent Volume Claims
+
+A PersistentVolume (PV) is a cluster-wide storage unit provisioned by an administrator with a lifecycle independent from a Pod.
+A PersistentVolumeClaim (PVC) is a request for a storage unit (PV).
+
+* A PersistentVolume is a cluster-wide storage resource that relies on network-atteched storage (NAS).
+* Normally provisioned by a cluster administrator.
+* Available to a Pod even if it gets rescheduled to a different Node.
+* Rely on a storage provider such as NFS, cloud storage, or other options.
+* Associated with a Pod by using a PersistentVolumeClaim (PVC).
+
+### StorageClass
+
+A StorageClass (SC) is a type of storage template that can be used to dynamically provision storage.
+
+Used to define different "classes" of storage.
+Act as a type of storage template.
+Supports dynamic provisioning of PersistentVolumes.
+Administrator don't have to create PVs in advance.
+
+### Kubernetes StatefulSet:
+
+Manages the deployment and scaling of a set of Pods, and provides guarantees about the ordering and uniqueness of these Pods.
+
