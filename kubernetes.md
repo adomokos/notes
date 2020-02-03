@@ -214,3 +214,55 @@ Administrator don't have to create PVs in advance.
 
 Manages the deployment and scaling of a set of Pods, and provides guarantees about the ordering and uniqueness of these Pods.
 
+## ConfigMaps
+
+ConfigMaps provide a way to store configuration information and provide it to containers.
+
+* Provides a way to inject configuration data into a container
+* Can store entire files or provide key/value pairs
+  - file is the key value is the file content
+  - provide on command-line
+  - ConfigMap manifest
+
+### Accessing ConfigMap Data in a Pod
+
+ConfigMaps can be access from a Pod using:
+* Environment variables (key/value)
+* ConfigMap Volume (access as files)
+
+### Creating a ConfigMap
+
+* They can go into the `data` section of the YAML.
+* They can be defined in a config file - `kubectl create configmap [cm-name] --from-file=[path-to-file]`
+* Create an ENV file - `kubectl create configmap [cm-name] --from-env-file=[path-to-file]` (Note that the file name is *not* included as a key.)
+* Use it literal - `kubectl create configmap [cm-name] --from-literal=apiUrl=https://my-api --from-literal=otherKey=otherValue`
+
+Get a ConfigMap:
+`kubectl get cm [cm-name] -o yaml`
+
+## Sercrets
+
+A Secret is an object that contains a small amount of sensitive data such as a password, a token or a key.
+
+* Kubernetes can store sensitive information (passwords, keys, ceritificates, etc.)
+* Avoids storing serets in container images, in files, or in deployment manifests.
+* Mount secrets into pods as files or as environment variables.
+* Kubernetes only makes secrets available to Nodes that have a Pod requesting the secrets.
+* Secrets are stored in tmpfs on a Node (not on disk)
+
+Secrets can be encrypted at rest.
+Limit access to etcd (where Secrets are stored) to only admin users
+Use SSL/TLS for etcd peer-to-peer communication.
+Manifest (YAML/JSON) files only base64 encode the Secret
+Pods Can access Secrets so secure which users can create Pods. Role-based access control (RBAC) can be used.
+
+### Creating Secrets
+
+`kubectl create secret generic my-secret --from-literal=pwd=my-password` - Create secret and store securely in Kubernetes
+`kubectl create secret generic my-secret --from-file=ssh-privatekey=~/.ssh/id_rsa` - Create a secret from file
+`kubectl create secret tls tls-secret --cert=path/to/tls.cert --key=path/to/tls.key` - Create a secret from a key pair
+
+### Get secrets
+
+`kubectl get secrets` - Get the secrets
+`kubectl get secrets db-password -o yaml` - listing secrets
