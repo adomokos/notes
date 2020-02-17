@@ -266,3 +266,42 @@ Pods Can access Secrets so secure which users can create Pods. Role-based access
 
 `kubectl get secrets` - Get the secrets
 `kubectl get secrets db-password -o yaml` - listing secrets
+
+## HELM
+
+Helm is a package manager for Kubernetes.
+
+Charts has the various YAML files for Kubeneretes. Helm in the command line tool to interact with Tiller via gRPC. Tiller is the service that runs the generated yaml files for kubectl, will create the cluster.
+
+Check helm's version:
+
+```
+helm version --short
+Client: v2.16.1+gbbdfe5e
+Server: v2.16.1+gbbdfe5e
+```
+
+Notice how the client and server has the same version, this is how it should be.
+
+### Cleaning up
+
+`helm list` will show the installations
+
+`helm delete <name-of-install>` will delete everything related to that install
+
+There are still some configmaps remaining items, find them with:
+
+`kubectl get configmaps --namespace=kube-system`.
+
+We can delete those with `helm delete <name-of-config-maps> --purge`
+
+### Helm commands
+
+`helm install [chart]` - Install a release
+`helm upgrade [release] [chart]` - Upgrade a release revision
+`helm rollback [release] [revision]` - Rollback to a release revision
+`helm history [release]` - Print release history
+`helm status [release]` - Display release status
+`helm get [release]` - Show details of a release
+`helm delete [release]` - Uninstall a release
+`helm list` - List releases
